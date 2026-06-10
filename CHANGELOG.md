@@ -2,6 +2,14 @@
 
 All notable changes to this project are documented here.
 
+## [0.2.1] - 2026-06-10
+
+### Changed
+- CI: pinned `actions/checkout` to v6.0.3 by commit SHA (resolves the Node.js 20
+  deprecation warning and hardens the supply chain).
+- CI: added `workflow_dispatch` (manual runs) and a `concurrency` group that cancels
+  superseded in-progress runs.
+
 ## [0.2.0] - 2026-06-10
 
 ### Added
