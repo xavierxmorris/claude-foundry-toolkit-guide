@@ -33,7 +33,8 @@ else {
 
     $account = az account show -o json 2>$null
     if (-not $account) {
-        Write-Host "[!] Not signed in. Run: az login" -ForegroundColor Yellow
+        Write-Host "[x] Not signed in. Run: az login" -ForegroundColor Red
+        $ok = $false
     }
     else {
         $info = $account | ConvertFrom-Json
@@ -47,3 +48,4 @@ if (-not $ok) {
 }
 
 Write-Host "`nPrerequisites OK." -ForegroundColor Green
+exit 0

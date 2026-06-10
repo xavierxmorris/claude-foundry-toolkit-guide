@@ -70,7 +70,12 @@ if (-not $SkipQuotaCheck -and -not (Test-Placeholder $region) -and -not (Test-Pl
         Write-Host "    Or override with -Force to attempt anyway." -ForegroundColor Yellow
         exit 2
     }
-    Write-Host "[ok] Quota looks available (limit = $limit)." -ForegroundColor Green
+    if ($null -eq $limit) {
+        Write-Host "[ok] No quota record found for '$model' in '$region'; the deploy step will validate." -ForegroundColor Green
+    }
+    else {
+        Write-Host "[ok] Quota looks available (limit = $limit)." -ForegroundColor Green
+    }
 }
 else {
     Write-Host "`n[3/5] Quota check skipped." -ForegroundColor DarkGray

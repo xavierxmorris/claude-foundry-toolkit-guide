@@ -20,21 +20,8 @@ param(
 )
 
 $ErrorActionPreference = 'Stop'
-
-if (Test-Path $EnvFile) {
-    Get-Content $EnvFile | ForEach-Object {
-        $line = $_.Trim()
-        if ($line -and -not $line.StartsWith('#') -and $line.Contains('=')) {
-            $k, $v = $line.Split('=', 2)
-            [Environment]::SetEnvironmentVariable($k.Trim(), $v.Trim())
-        }
-    }
-}
-
-function Resolve-Value($paramValue, $envName) {
-    if (-not [string]::IsNullOrWhiteSpace($paramValue)) { return $paramValue }
-    return [Environment]::GetEnvironmentVariable($envName)
-}
+. (Join-Path $PSScriptRoot '_common.ps1')
+Import-DotEnv $EnvFile
 
 $SubscriptionId = Resolve-Value $SubscriptionId 'AZURE_SUBSCRIPTION_ID'
 $ResourceGroup  = Resolve-Value $ResourceGroup  'FOUNDRY_RESOURCE_GROUP'

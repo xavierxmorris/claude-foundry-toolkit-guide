@@ -31,23 +31,10 @@ param(
 )
 
 $ErrorActionPreference = 'Stop'
+. (Join-Path $PSScriptRoot '_common.ps1')
 
-# --- Load .env (KEY=VALUE lines) into the process environment, if present ---
-if (Test-Path $EnvFile) {
-    Get-Content $EnvFile | ForEach-Object {
-        $line = $_.Trim()
-        if ($line -and -not $line.StartsWith('#') -and $line.Contains('=')) {
-            $k, $v = $line.Split('=', 2)
-            [Environment]::SetEnvironmentVariable($k.Trim(), $v.Trim())
-        }
-    }
-}
-
-# --- Resolve values: explicit param > env var ---
-function Resolve-Value($paramValue, $envName) {
-    if (-not [string]::IsNullOrWhiteSpace($paramValue)) { return $paramValue }
-    return [Environment]::GetEnvironmentVariable($envName)
-}
+# --- Load .env and resolve values: explicit param > env var ---
+Import-DotEnv $EnvFile
 
 $SubscriptionId = Resolve-Value $SubscriptionId 'AZURE_SUBSCRIPTION_ID'
 $ResourceGroup  = Resolve-Value $ResourceGroup  'FOUNDRY_RESOURCE_GROUP'

@@ -20,16 +20,8 @@ param(
 )
 
 $ErrorActionPreference = 'Stop'
-
-if (Test-Path $EnvFile) {
-    Get-Content $EnvFile | ForEach-Object {
-        $line = $_.Trim()
-        if ($line -and -not $line.StartsWith('#') -and $line.Contains('=')) {
-            $k, $v = $line.Split('=', 2)
-            [Environment]::SetEnvironmentVariable($k.Trim(), $v.Trim())
-        }
-    }
-}
+. (Join-Path $PSScriptRoot '_common.ps1')
+Import-DotEnv $EnvFile
 
 if (-not $SubscriptionId) { $SubscriptionId = [Environment]::GetEnvironmentVariable('AZURE_SUBSCRIPTION_ID') }
 if ($SubscriptionId -and $SubscriptionId -notlike '<*>') {

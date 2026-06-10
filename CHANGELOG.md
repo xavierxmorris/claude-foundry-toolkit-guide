@@ -2,6 +2,21 @@
 
 All notable changes to this project are documented here.
 
+## [0.2.2] - 2026-06-10
+
+### Fixed
+- `check-prereqs.ps1` no longer reports success while leaving a non-zero exit code when
+  Azure CLI is installed but not signed in. Sign-in is now a hard prerequisite and the
+  script exits 0 explicitly on success (prevents `setup.ps1` from aborting after
+  printing "Prerequisites OK").
+- `request-quota.ps1` dry-run preview now prints real line breaks instead of a literal
+  `\n` sequence.
+
+### Changed
+- Scaffold scripts now share `.env` loading and value resolution via `_common.ps1`
+  (removed duplicated inline helpers in `deploy-claude.ps1`, `list-claude-models.ps1`,
+  `check-claude-quota.ps1`, and `request-quota.ps1`).
+
 ## [0.2.1] - 2026-06-10
 
 ### Changed
