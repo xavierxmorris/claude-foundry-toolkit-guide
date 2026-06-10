@@ -1,5 +1,7 @@
 # How to Set Up a Claude Model in Microsoft Foundry via the Foundry Toolkit
 
+[![CI](https://github.com/xavierxmorris/claude-foundry-toolkit-guide/actions/workflows/ci.yml/badge.svg)](https://github.com/xavierxmorris/claude-foundry-toolkit-guide/actions/workflows/ci.yml)
+
 A practical, battle‑tested guide for deploying an **Anthropic Claude** model into
 **Microsoft Foundry** (Azure AI Services) and connecting it inside the **Foundry
 Toolkit** (formerly *AI Toolkit*, *AITK*) for VS Code.
@@ -11,6 +13,18 @@ focuses on the things that actually trip people up: **picking a real model name*
 > ⚠️ **No secrets here.** Every subscription ID, resource name, project name, and
 > email in this repo is a **placeholder** like `<SUBSCRIPTION_ID>`. See
 > [Where to put your own values](#where-to-put-your-own-values) before you start.
+
+## TL;DR (one command)
+
+```powershell
+cd scaffold
+Copy-Item .env.example .env      # then edit .env with YOUR values
+./setup.ps1                      # prereqs → quota gate → deploy → verify
+# YOLO (no prompts): ./setup.ps1 -AutoApprove
+```
+
+`setup.ps1` orchestrates every step below and stops early if quota is missing.
+Prefer to do it manually or understand each step? Read on.
 
 ---
 
@@ -211,15 +225,40 @@ You want `"state": "Succeeded"`.
 ```
 .
 ├── README.md                     # this guide
+├── SECURITY.md                   # no-secrets policy + how CI protects the repo
+├── CONTRIBUTING.md               # how to run the checks locally
+├── CHANGELOG.md
+├── PSScriptAnalyzerSettings.psd1 # lint config
+├── .github/workflows/ci.yml      # secret scan + lint + bicep build
+├── tools/
+│   └── scan-secrets.ps1          # self-contained secret / PII scanner
 └── scaffold/
     ├── .env.example              # copy to .env and fill in YOUR values
+    ├── setup.ps1                 # ⭐ one-command orchestrator
+    ├── check-prereqs.ps1         # verify az / pwsh / sign-in
     ├── list-claude-models.ps1    # find real Claude model names
     ├── check-claude-quota.ps1    # check/scan quota across regions
     ├── request-quota.ps1         # opt-in support-ticket scaffold
     ├── deploy-claude.ps1         # deploy a Claude model (verified path)
+    ├── verify-deployment.ps1     # confirm state is Succeeded
     ├── deployment-body.json      # REST body template (placeholders)
-    └── main.bicep                # IaC alternative
+    ├── main.bicep                # IaC alternative
+    ├── main.bicepparam           # Bicep parameters (placeholders)
+    ├── _common.ps1               # shared .env helpers
+    └── README.md
 ```
+
+## Security & automated checks
+
+This repo is CI-guarded so it stays safe to keep public:
+
+- **Secret/PII scan** — [`tools/scan-secrets.ps1`](tools/scan-secrets.ps1) runs on every
+  push/PR and fails if a real subscription ID (GUID), token, private key, or non-example
+  email slips in. Run it locally any time: `pwsh ./tools/scan-secrets.ps1`.
+- **PowerShell lint** — PSScriptAnalyzer across all scripts.
+- **Bicep build** — validates `scaffold/main.bicep`.
+
+See [SECURITY.md](SECURITY.md) for the full policy and how to report issues.
 
 ## License
 

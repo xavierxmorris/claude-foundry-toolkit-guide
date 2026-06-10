@@ -9,6 +9,7 @@ scaffold/.env
 *.log
 *.tmp
 *.out.txt
+scaffold/main.json
 
 # OS / editor
 .DS_Store

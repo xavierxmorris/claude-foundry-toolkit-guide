@@ -6,23 +6,36 @@ Copy `.env.example` to `.env`, fill in **your own** values, then run the scripts
 | File | Purpose |
 |------|---------|
 | `.env.example` | Template of all values. Copy to `.env` and edit. |
+| `setup.ps1` | **One-command** orchestrator: prereqs → models → quota → deploy → verify. |
+| `check-prereqs.ps1` | Verify PowerShell 7+, Azure CLI, and sign-in. |
 | `list-claude-models.ps1` | Print the **real** deployable Claude model names/versions. |
 | `check-claude-quota.ps1` | Check/scan Claude quota across regions (limit 0 = blocked). |
 | `request-quota.ps1` | Opt-in support-ticket scaffold to raise quota (dry-run by default). |
 | `deploy-claude.ps1` | Deploy a Claude model (verified REST path with provider data). |
+| `verify-deployment.ps1` | Confirm the deployment reached `Succeeded`. |
 | `deployment-body.json` | Raw REST body template if you prefer `az rest` directly. |
-| `main.bicep` | Infrastructure-as-Code alternative for the deployment. |
+| `main.bicep` / `main.bicepparam` | Infrastructure-as-Code alternative + parameters. |
+| `_common.ps1` | Shared `.env` / value-resolution helpers used by the scripts. |
 
 ## Quick start (PowerShell 7+)
+
+**One command:**
 
 ```powershell
 cd scaffold
 Copy-Item .env.example .env
 # edit .env with your values
+./setup.ps1                  # add -AutoApprove for an unattended run
+```
 
+**Or step by step:**
+
+```powershell
+./check-prereqs.ps1          # az / pwsh / sign-in
 ./list-claude-models.ps1     # confirm a real model name/version
 ./check-claude-quota.ps1     # make sure limit > 0
 ./deploy-claude.ps1          # deploy
+./verify-deployment.ps1      # confirm Succeeded
 ```
 
 ## Where do my values come from?
