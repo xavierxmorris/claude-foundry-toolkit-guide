@@ -1,0 +1,11 @@
+{
+  "sku": { "name": "GlobalStandard", "capacity": 1 },
+  "properties": {
+    "model": { "format": "Anthropic", "name": "claude-sonnet-4-5", "version": "20250929" },
+    "modelProviderData": {
+      "industry": "Technology",
+      "organizationName": "<YOUR_ORGANIZATION_NAME>",
+      "countryCode": "AU"
+    }
+  }
+}

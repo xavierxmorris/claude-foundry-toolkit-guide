@@ -1,0 +1,16 @@
+# Secrets & local config — never commit these
+.env
+*.env
+!.env.example
+scaffold/.env
+
+# Azure / tooling
+.azure/
+*.log
+*.tmp
+*.out.txt
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
